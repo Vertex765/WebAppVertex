@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ {% load static %}
+  
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="{% static 'midias/icone.png' %}" type="image/png">
+
+
+  <title>Painel de Vendas</title>
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .app-container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: #008000;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+
+      opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards; 
+    }
+    @keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    .header {
+      color : white;
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h2 {
+      color: #ffffff;
+      margin: 5px 0;
+      font-size: 22px;
+    }
+
+    .sub {
+      color: #ffffff;
+      font-size: 14px;
+    }
+    .sub1 {
+     text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+    .sales {
+      color: #ffffff;
+      text-align: center;
+      margin: 20px 0 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .progress-bar {
+      background: #ddd;
+      border-radius: 30px;
+      height: 16px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+.progress-fill {
+  width: 0%; /* começa vazio */
+  height: 100%;
+  background-color: var(--linha-cor);
+  transition: width 1.5s ease-out; /* animação ao mudar a largura */
+}
+    .milestones {
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+.nivel-central {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: none; /* evita problemas de clique embaixo */
+}
+
+    .section-title {
+      color: #ffffff;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      display: flex;
+  align-items: center;       /* alinha verticalmente */
+  justify-content: space-between; /* separa o título da imagem */
+    }
+
+    .reward-box, .referral-box {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .reward-box img {
+      width: 24px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .bottom {
+      
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-circle {
+      width: 10px;
+      height: 10px;
+      background-color: #16aa3b;
+      border-radius: 50%;
+      display: inline-block;
+    }
+ .timeline-container {
+      position: relative;
+      margin: 40px auto;
+      padding-left: 40px;
+      width: 300px;
+    }
+.timeline-line {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  width: 4px;
+  background-color: var(--linha-cor);    
+  height: 0;
+  animation: growLine 1s forwards;
+}
+
+@keyframes growLine {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--linha-altura, 100%);
+  }
+}
+
+
+    .timeline-step {
+      color: #ffffff;
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -32px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--linha-cor);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .timeline-text {
+      color: #ffffff;
+      margin-left: 20px;
+    }
+
+    .start-marker,
+    .end-marker {
+      color: #ffffff;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+   .bronze {
+      color: #cd7f32;
+    }
+
+    .prata {
+      color: #c0c0c0;
+    }
+
+    .ouro {
+      color: #ffd700;
+    }
+
+    .diamante {
+      color: #00cfff;
+    }
+
+    /* Estilo do SVG */
+    #trofeu {
+      fill: currentColor;
+      transition: color 1s ease;
+      display: block;
+       width: 35px;
+      height: 35px;
+      margin-right: 10px;
+      position: absolute;
+      left: 2px;
+      top: 5px;
+    }
+    #trofeuatu {
+       transition: color 1s ease;
+      width: 80px;
+      height: 80px;
+      color : currentColor;
+      display: inline-block;
+      margin-bottom: 10px;
+      animation: cortrofeu 1s ease-in;
+    
+    } 
+    @keyframes cortrofeu{
+   10% {
+    color: #f0f0f0;
+   }
+    }
+  
+
+      .logovs {
+  width: 200px;       /* ou 80px, 120px — ajuste como quiser */
+  height: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+    .share {
+  width: 18px;       /* ou 80px, 120px — ajuste como quiser */
+   height: auto;
+  cursor: pointer;
+  margin-left: 70;
+  margin-top: 4px; /* ou 5px, 6px — teste o valor ideal */
+}
+ .copy {
+  
+  width: 18px;       /* ou 80px, 120px — ajuste como quiser */
+   height: auto;
+  cursor: pointer;
+  margin-left: 80;
+  margin-top: 4px; /* ou 5px, 6px — teste o valor ideal */
+}
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Botão do menu */
+    .menu-btn {
+      font-size: 30px;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      color: var(--corbtn);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 20%;
+      width: 200px;
+      position: fixed;
+      top: 0;
+      left: -150%; /* Escondido inicialmente */
+      background-color: #ffffff;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 1;
+      border-radius: 10%;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #16aa3b;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #d0d0d0;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+
+    /* Conteúdo principal */
+    .main {
+      padding: 20px;
+    }
+    
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caixa do conteúdo */
+.modal-content {
+  background: white;
+  padding: 0;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow: hidden;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+</style>
+
+<!-- Modal -->
+<div class="modal" id="videoModal">
+  <span class="close-btn" id="closeModal">&times;</span>
+  <div class="modal-content">
+    <iframe id="youtubeVideo" width="fill" height="auto"
+      src="https://www.youtube.com/embed/PajREH-o8Xo?si=Vut2tM5RmNwyFO0y?autoplay=1"
+      title="YouTube video player"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+  </style>
+</head>
+<script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/static/js/service-worker.js')
+        .then(() => console.log("Service Worker registrado"));
+    }
+  </script>
+<body>
+
+
+<div class="app-container">
+
+ 
+ 
+  <button id="menubtn" class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div id="sidebar" class="sidebar">
+    <a href="{% url 'treinamento' %}">Treinamento</a>
+    <a href="{% url 'comissionamento' %}">Comissionamento</a>
+    <a href="{% url 'acessos' %}">Meus acessos</a>
+    <a href="{% url 'material' %}">Material</a>
+    <a href="{% url 'voltar' %}">Sair</a>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="main">
+  </div>
+  <div class="header">
+
+ 
+
+    <div><span id="loading"></span>
+    </div>
+          <div id="container-nivelatu">
+    <svg id="trofeuatu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="CurrentColor" class="size-6">
+  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.658-.744 49.22 49.22 0 0 0-6.093-.377c-2.063 0-4.096.128-6.093.377a.75.75 0 0 0-.657.744Zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 0 1 3.16 5.337a45.6 45.6 0 0 1 2.006-.343v.256Zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 0 1-2.863 3.207 6.72 6.72 0 0 0 .857-3.294Z" clip-rule="evenodd" />
+</svg>
+  </div>
+     <h2 id="nomeUsuario">Carregando</h2>
+    <div class="sub">Painel de Conquistas</div>
+  </div>
+   
+  <div class="sales"><span id="Totalemvendas"></span></div>
+   
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+  <div class="milestones">
+  <span class="start"><span id="NivelMetamin"></span></span>
+
+  <div class="nivel-container">
+    <span></span>
+    <span id="NivelUsuario"></span>
+  </div>
+
+  <span class="end"><span  id="NivelMeta"></span></span>
+</div>
+
+
+  <div class="section-title">Painel Financeiro</div>
+  <div class="reward-box">
+    <strong></strong>Meu Saldo: <strong id="SaldoL">R$ 0</strong>
+    <div>
+       <span>Faturamento Liquido </span><strong id="FL">R$ 0</strong></div>
+      <strong></strong>Ganho com Indicações: <strong id="Gindi">R$ 0</strong>
+     
+  </div>
+  <div class="section-title">Indicações</div>
+  <div class="referral-box">
+    <div>Codigo de indicação <strong id="Meucod" ></strong >
+      <img src="{% static 'midias/share.png' %}" alt="share" class="share" id="shareBtn">
+      <img src="{% static 'midias/copy.png' %}" alt="share" class="copy" id="copy">
+    </div> 
+    <div class="bottom">
+      <div class="icon-circle"></div>
+      <div><strong id="Qindi">0</strong> indicações</div>
+    </div>
+  </div>
+  <div class="timeline-container">
+  <!-- Ícone topo -->
+  <div class="start-marker">
+      <div id="container-nivel">
+    <svg id="trofeu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.658-.744 49.22 49.22 0 0 0-6.093-.377c-2.063 0-4.096.128-6.093.377a.75.75 0 0 0-.657.744Zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 0 1 3.16 5.337a45.6 45.6 0 0 1 2.006-.343v.256Zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 0 1-2.863 3.207 6.72 6.72 0 0 0 .857-3.294Z" clip-rule="evenodd" />
+</svg>
+  </div>
+    <strong>Próxima conquista</strong><br>
+    <small  id="proximonivel">Carregando</small>
+
+  </div>
+  <div class="timeline-line"></div>
+
+<div class="timeline-step">
+  <div class="timeline-dot"></div>
+  <div class="timeline-text">
+    <strong id="vert3">Carregando</strong><br>
+    <small id="vertrest2">Carregando</small>
+  </div>
+</div>
+
+<div class="timeline-step">
+  <div class="timeline-dot"></div>
+  <div class="timeline-text">
+    <strong id="vert2">Carregando</strong><br>
+    <small id="vertrest1">Carregando</small>
+  </div>
+</div>
+
+<div class="timeline-step">
+  <div class="timeline-dot"></div>
+  <div class="timeline-text">
+    <strong id="vert1">Carregando</strong><br>
+    <small id="vertrest">Carregando</small>
+  </div>
+</div>
+
+<div class="timeline-step">
+  <div class="timeline-dot"></div>
+  <div class="timeline-text">
+    <strong id="AtualNivel">Carregando</strong><br>
+    <small>Conquista desbloqueada!</small>
+  </div>
+</div>
+</div>
+  <div class="sub1"><span id="motivacional"></span></div>
+  <img src="{% static 'midias/logovs.png' %}" alt="Logovs" class="logovs">
+</div>
+<script>     
+
+  
+
+
+
+
+
+
+// Mostra o modal assim que entrar na página
+window.addEventListener("load", function() {
+  const lisner = JSON.parse(localStorage.getItem("alldados"))
+
+if(!lisner.dados.meusacessos[0]){
+document.getElementById("videoModal").style.display = "flex";
+  video.play()
+}
+
+  
+});
+ 
+// Fecha e para o vídeo ao clicar no X
+document.getElementById("closeModal").onclick = function() {
+  let modal = document.getElementById("videoModal");
+  let iframe = document.getElementById("youtubeVideo");
+
+  // Para o vídeo recarregando o src
+  iframe.src = iframe.src;
+
+  modal.style.display = "none";
+};
+
+  document.getElementById("loading",loading)
+  document.getElementById("copy").style.display = "none"
+   document.getElementById("shareBtn").style.display = "none"
+ document.documentElement.style.setProperty('--corbtn', "#ffffff"); 
+ 
+
+ const frasesUrl = "{% static 'frases.json' %}";
+let corbase = "#ffffff" 
+ document.addEventListener('click', function(event) {
+  
+  const sidebar = document.getElementById("sidebar");
+  const button = document.querySelector(".menu-btn");
+
+  if (!sidebar.contains(event.target) && !button.contains(event.target)) {
+    sidebar.classList.remove("show");
+     document.documentElement.style.setProperty('--corbtn', "#ffffff")
+     corbase = "#ffffff";
+  } 
+ 
+});
+
+ function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("show");
+      if (corbase == "#ffffff") {
+      corbase = "#16aa3b";
+       document.documentElement.style.setProperty('--corbtn', "#16aa3b");
+      } else {
+        document.documentElement.style.setProperty('--corbtn', "#ffffff");
+         corbase = "#ffffff";
+      }
+      
+    }
+   async function Inicial() {
+   let data = JSON.parse(localStorage.getItem("alldados"));
+   const cpf = sessionStorage.getItem("cpf");
+   const email = sessionStorage.getItem("gmail");
+   const total = data.dados.total
+   let totalVendido = total
+   const nomepuro = data.dados.nome
+   const nomeCompleto = nomepuro
+        const nomeExibir = formatarNomeExibicao(nomeCompleto);
+        const primeirosnomes = nomeExibir
+        const nome = primeirosnomes
+       document.getElementById("nomeUsuario").innerText = nome;
+      let nivel = classificarVendedor(totalVendido);
+
+  let codigo = data.dados.codigo
+ 
+    
+
+  
+      function copiarTexto(texto) {
+  navigator.clipboard.writeText(texto)
+    .then(() => {
+      alert("Link de indicação copiado com sucesso!");
+      // Você pode mostrar uma mensagem na tela aqui também 
+      
+    })
+    .catch(err => {
+      alert("Erro ao copiar", err);
+    });
+}
+
+
+copy.addEventListener('click', async () => {
+  const baseUrl = window.location.origin; 
+const link = `${baseUrl}/?codigo=${codigovariavel}`;
+  try {
+   await copiarTexto(link)
+    
+  } catch (err) {
+    console.log('Erro ao compartilhar:', err);
+  }
+});
+
+
+shareBtn.addEventListener('click', async () => {
+const baseUrl = window.location.origin; 
+const link = `${baseUrl}/?codigo=${codigovariavel}`;
+
+  try {
+    await navigator.share({
+      title: 'Vertex',
+      text:
+        `${link}\n\nEi vem ser parceiro Vertex você também e comece a faturar usando apenas o seu celular`
+        ,
+    });
+  } catch (err) {
+    console.log('Erro ao compartilhar:', err);
+  }
+});
+
+
+
+ if (codigo) {
+  codigovariavel = codigo
+  document.getElementById("Meucod").innerText = codigovariavel;
+  document.getElementById("copy").style.display = "inline"
+   document.getElementById("shareBtn").style.display = "inline"
+} else {
+   document.getElementById("Gindi").innerText = ("0")
+  document.getElementById("Qindi").innerText = "0";
+  document.getElementById("Meucod").innerText = "Estamos gerando seu código...";
+  
+
+
+  postcod()
+    .then(response => {
+     
+
+      // ✅ Mostra apenas o código na tela
+      document.getElementById("Meucod").innerText = response.dados.codigo;
+    })
+    .catch(error => {
+       document.getElementById("Gindi").innerText = ("0")
+       document.getElementById("Qindi").innerText = "0";
+      document.getElementById("Meucod").innerText = "Quase lá, aguarde mais um pouco...";
+      document.getElementById("SaldoL").innerText = formatarParaReal(data.dados.saldo);
+      fazerRequisicao()
+     
+    });
+}
+
+
+
+      
+     
+      
+
+      document.getElementById("Gindi").innerText = formatarParaReal(data.dados.ganhosindicados);
+      document.getElementById("Qindi").innerText = data.dados.qntindi;
+      document.getElementById("SaldoL").innerText = formatarParaReal(data.dados.saldo);
+      document.getElementById("FL").innerText = formatarParaReal(data.dados.liquido);
+
+
+
+       
+       function formatarParaReal(valor) {
+  return valor.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 0 // remove os centavos
+  });
+}
+
+  let formatarvalor = formatarParaReal(totalVendido)
+  function animarNumero(elementId, valorFinal, duracao = 2000) {
+  const elemento = document.getElementById(elementId);
+  let inicio = 0;
+  const incremento = valorFinal / (duracao / 30); // atualiza a cada 30ms
+
+  const contador = setInterval(() => {
+    inicio += incremento;
+    if (inicio >= valorFinal) {
+      inicio = valorFinal;
+      clearInterval(contador);
+    }
+    elemento.innerText = formatarParaReal(Math.floor(inicio));
+  }, 30);
+}
+
+animarNumero("Totalemvendas", totalVendido);
+
+
+  function classificarVendedor(totalVendido) {
+  if (totalVendido < 4700) {
+    return "Bronze Nivel I";
+  } else if (totalVendido > 4699 && totalVendido < 7400) {
+    return "Bronze Nivel II";
+  } else if (totalVendido > 7399 && totalVendido < 10000) {
+    return "Bronze Nivel III";
+  } else if (totalVendido > 9999 && totalVendido < 46550) {
+  return "Prata Nivel I";
+} else if (totalVendido > 46549 && totalVendido < 65550) {
+  return "Prata Nivel II";
+} else if (totalVendido > 74099 && totalVendido < 100000) {
+return "Prata Nivel III";
+} else if (totalVendido > 99999 && totalVendido < 464000) {
+return "Ouro Nivel I";
+}
+else if(totalVendido > 463999 && totalVendido < 735000) {
+  return "Ouro Nivel II";
+} else if(totalVendido > 734999 && totalVendido < 1000000) {
+  return "Ouro Nivel III";
+}
+  else if(totalVendido > 999999 && totalVendido < 3800000) {
+  return "Diamante";
+  }
+}
+  function classificarMeta(meta) {
+  if (totalVendido < 10000) {
+    return 10000;
+  } else if (totalVendido < 100000) {
+    return 100000;
+  } else if (totalVendido < 1000000) {
+    return 1000000;
+  } 
+   else if (totalVendido < 10000000) {
+    return 10000000;
+  } 
+}
+  function classificarMetamin(meta) {
+  if (totalVendido < 10000) {
+    return 0;
+  } else if (totalVendido < 100000) {
+    return 10000;
+  } else if (totalVendido < 1000000) {
+    return 100000;
+  } 
+  else {
+    return 1000000;
+  }
+}
+
+
+
+  let bonus = {
+   premio : [],
+   resta : [],
+   proxnivel : (""),
+   nivelatual : (""),
+   cordonivel : ("")
+  }
+  if (totalVendido < 10000){
+  bonus.cordonivel = ("#cd7f32")
+   bonus.premio = ["Premio R$20,00","Premio R$30,00","Premio R$50,00 | Placa 10k em vendas"]
+   if(classificarVendedor(totalVendido) === "Bronze Nivel I") {
+    bonus.resta[0] = ("Falta " + formatarParaReal(4700 - totalVendido))
+    bonus.resta[1] = ("Desbloquei a conquista anterior")
+    bonus.resta[2] = ("Desbloquei a conquista anterior")
+    bonus.proxnivel = ("Prata Nivel I")
+    bonus.nivelatual = "Se tornar parceiro Vertex"
+   }
+else if(classificarVendedor(totalVendido) === "Bronze Nivel II") {
+ bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Falta " + formatarParaReal(7400 - totalVendido))
+ bonus.resta[2] = ("Desbloquei a conquista anterior")
+ bonus.proxnivel = ("Prata Nivel I")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+} 
+else if(classificarVendedor(totalVendido) === "Bronze Nivel III") {
+ bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Parábens você ganhou essa conquista")
+ bonus.resta[2] = ("Falta " + formatarParaReal(10000 - totalVendido))
+ bonus.proxnivel = ("Prata Nivel I")
+  bonus.nivelatual = classificarVendedor(totalVendido)
+}
+}
+  if (totalVendido > 9999 && totalVendido < 100000){
+    bonus.cordonivel = "#c0c0c0"
+   bonus.premio = ["Premio R$200","Premio R$200","Premio R$500 | Placa 100k em vendas"]
+   if(classificarVendedor(totalVendido) === "Prata Nivel I") {
+    bonus.resta[0] = ("Falta " + formatarParaReal(46550 - totalVendido))
+    bonus.resta[1] = ("Desbloquei a conquista anterior")
+    bonus.resta[2] = ("Desbloquei a conquista anterior")
+    bonus.proxnivel = ("Ouro Nivel I")
+    bonus.nivelatual = classificarVendedor(totalVendido) 
+   }
+else if(classificarVendedor(totalVendido) === "Prata Nivel II") {
+ bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Falta " + formatarParaReal(65550 - totalVendido))
+ bonus.resta[2] = ("Desbloquei a conquista anterior")
+ bonus.proxnivel = ("Ouro Nivel I")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+} 
+else if(classificarVendedor(totalVendido) === "Prata Nivel III") {
+ bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Parábens você ganhou essa conquista")
+ bonus.resta[2] = ("Falta " + formatarParaReal(100000 - totalVendido))
+ bonus.proxnivel = ("Ouro Nivel I")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+}
+
+}
+else if (totalVendido > 99999 && totalVendido < 1000000){
+  bonus.cordonivel = "#ffd700"
+bonus.premio = ["Premio R$2000","Premio R$2000","Premio R$5000 | Placa 1M em vendas"]
+if(classificarVendedor(totalVendido) === "Ouro Nivel I") {
+  bonus.resta[0] = ("Falta " + formatarParaReal(464000 - totalVendido))
+    bonus.resta[1] = ("Desbloquei a conquista anterior")
+    bonus.resta[2] = ("Desbloquei a conquista anterior")
+    bonus.proxnivel = ("Diamante")
+    bonus.nivelatual = classificarVendedor(totalVendido) 
+} else if (classificarVendedor(totalVendido) === "Ouro Nivel II") {
+  bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Falta " + formatarParaReal(735000 - totalVendido))
+ bonus.resta[2] = ("Desbloquei a conquista anterior")
+ bonus.proxnivel = ("Diamante")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+} else if (classificarVendedor(totalVendido) === "Ouro Nivel III") {
+   bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Parábens você ganhou essa conquista")
+ bonus.resta[2] = ("Falta " + formatarParaReal(1000000 - totalVendido))
+ bonus.proxnivel = ("Diamante")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+}
+} 
+else if (totalVendido > 999999 && totalVendido < 10000000)
+{
+  bonus.cordonivel = "#00cfff"
+  bonus.premio = ["Premio R$20.000","Premio R$20.000","Premio R$50.000 | Placa Vendedor Diamante"];
+  if(classificarVendedor(totalVendido) === "Diamante") {
+  bonus.resta[0] = ("Falta " + formatarParaReal(3800000 - totalVendido))
+    bonus.resta[1] = ("Desbloquei a conquista anterior")
+    bonus.resta[2] = ("Desbloquei a conquista anterior")
+    bonus.proxnivel = ("Diamante I")
+    bonus.nivelatual = classificarVendedor(totalVendido)}
+     if(classificarVendedor(totalVendido) === "Diamante I" && totalVendido > 3799999) {
+     bonus.resta[0] = ("Parábens você ganhou essa conquista")
+ bonus.resta[1] = ("Falta " + formatarParaReal(7350000 - totalVendido))
+ bonus.resta[2] = ("Desbloquei a conquista anterior")
+ bonus.proxnivel = ("Diamante II")
+ bonus.nivelatual = classificarVendedor(totalVendido)
+  }
+}
+
+
+let conquistasvertical = bonus;
+
+
+document.getElementById("vertrest").innerText = conquistasvertical.resta[0];
+document.getElementById("vertrest1").innerText = conquistasvertical.resta[1];
+document.getElementById("vertrest2").innerText = conquistasvertical.resta[2];
+document.getElementById("proximonivel").innerText = conquistasvertical.proxnivel;
+document.getElementById("AtualNivel").innerText = conquistasvertical.nivelatual;
+
+
+
+document.getElementById("vert1").innerText = conquistasvertical.premio[0];
+document.getElementById("vert2").innerText = conquistasvertical.premio[1];
+document.getElementById("vert3").innerText = conquistasvertical.premio[2];
+
+
+let metamin = formatarParaReal(classificarMetamin(totalVendido));
+document.getElementById("NivelMetamin").innerText = metamin;
+let meta = classificarMeta(totalVendido);
+let metafor = formatarParaReal(meta);
+document.getElementById("NivelMeta").innerText = metafor;
+
+document.getElementById("NivelUsuario").innerText = nivel;
+ 
+  const progresso = Math.min(100, (totalVendido / meta) * 100);
+  const progressov = Math.min(100, (totalVendido / meta) * 72   );
+const bar = document.getElementById("progressBar");
+
+
+const nivelAtual = conquistasvertical.proxnivel;
+const nivelAtualatu = conquistasvertical.nivelatual;
+
+    const mapaCores = {
+      "Se tornar parceiro Vertex": "bronze",
+      "Bronze Nivel I": "bronze",
+      "Bronze Nivel II": "bronze",
+      "Bronze Nivel III": "bronze",
+      "Prata Nivel I": "prata",
+      "Prata Nivel II": "prata",
+      "Prata Nivel III": "prata",
+      "Ouro Nivel I": "ouro",
+      "Ouro Nivel II": "ouro",
+      "Ouro Nivel III": "ouro",
+      "Diamante": "diamante",
+      "Diamante I": "diamante",
+    };
+
+ const container = document.getElementById("container-nivel");
+ const containeratu = document.getElementById("container-nivelatu");
+
+    // Remove todas as classes de cor
+    container.classList.remove("bronze", "prata", "ouro", "diamante");
+    containeratu.classList.remove("bronze", "prata", "ouro", "diamante");
+
+    // Aplica a cor certa com base no nível
+    const classe = mapaCores[nivelAtual];
+    if (classe) {
+      container.classList.add(classe);
+    }
+    const classeatu = mapaCores[nivelAtualatu];
+    if (classeatu) {
+      containeratu.classList.add(classeatu);
+    }
+
+    document.documentElement.style.setProperty('--linha-cor', bonus.cordonivel);
+
+if(progressov < 10) {
+  document.documentElement.style.setProperty('--linha-altura', "10%");
+} else {
+   document.documentElement.style.setProperty('--linha-altura', progressov + "%");
+}
+
+setTimeout(() => {
+  bar.style.width = progresso + "%";
+}, 100);
+       
+   
+fetch(frasesUrl)
+   .then(response => response.json())
+   .then(data => {
+     // Acessa o array de frases
+     const frases = data.frases;
+     // Sorteia uma frase aleatória
+     const indice = Math.floor(Math.random() * frases.length);
+     const fraseSorteada = frases[indice];
+     // Exibe no console (ou no HTML)
+     console.log("Frase sorteada:", fraseSorteada);
+     // Exemplo: mostrar em um <p id="frase-motivacional">
+     document.getElementById("motivacional").textContent = fraseSorteada;
+   })
+   .catch(error => {
+     console.error("Erro ao carregar o JSON:", error);
+
+   });
+
+   
+async function postcod() {
+  const token = sessionStorage.getItem("token")
+  try {
+    const urls = `https://script.google.com/macros/s/${encodeURIComponent(token)}/exec`;
+    
+    const data = {
+      action: "CODALE",
+      cpf: sessionStorage.getItem("cpf")
+    };
+
+    const response = await fetch(urls, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      mode: 'no-cors', // <- ALTERADO AQUI
+      redirect: 'follow',
+      credentials: 'omit'
+    });
+
+   try {
+  const result = await response.json();
+  
+  return ;
+} catch (err) {
+  console.error("Erro ao tentar ler JSON:", err);
+  throw err;
+}
+    const result = await response.json();
+    return result;
+
+  } catch (error) {
+    console.error('Erro na requisição:', error);
+    throw error;
+  }
+}
+
+async function fazerRequisicao() {
+  const token = sessionStorage.getItem("token")
+  const cpf = sessionStorage.getItem("cpf")
+  const email = sessionStorage.getItem("gmail")
+  const url2 = `https://script.google.com/macros/s/${encodeURIComponent(token)}/exec?action=Login&cpf=${encodeURIComponent(cpf)}&email=${encodeURIComponent(email)}`;
+
+
+  try {
+    const response = await fetch(url2);
+    
+    if (!response.ok) {
+      throw new Error("Erro HTTP: " + response.status);
+    }
+    
+    try {
+      const data = await response.json();
+      
+      if (data.existe) {
+         document.getElementById("Meucod").innerText = data.dados.codigo;
+         document.getElementById("SaldoL").innerText = "R$ " + data.dados.saldo;
+         codigovariavel = data.dados.codigo
+          document.getElementById("copy").style.display = "inline"
+      document.getElementById("shareBtn").style.display = "inline"
+       const alldados = { 
+    dados: {
+    nome: data.dados.nome,
+    codigo: data.dados.codigo,
+    total: data.dados.total,
+    saldo : data.dados.saldo,
+    ganhosindicados: data.dados.ganhosindicados,
+    liquido: data.dados.liquido,
+    qntindi : data.dados.qntindi,
+    meusacessos: data.dados.meusacessos,
+    bancosdisponiveis: data.dados.bancosdisponiveis
+    }
+  }
+localStorage.setItem("alldados", JSON.stringify(alldados));
+
+        
+        // código quando existe é true
+      } else {
+         document.getElementById("Meucod").innerText = "Recarregue a pagina";
+        // código quando existe é false
+      }
+    } catch (parseError) {
+      document.getElementById("Meucod").innerText = "Recarregue a pagina";
+      console.error("Erro ao parsear JSON:", parseError);
+    }
+    
+  } catch (fetchError) {
+    console.error("Erro na requisição:", fetchError);
+  }
+}
+
+// Chame a função
+  
+
+
+ // Simulando cálculo de progresso baseado na meta de R$100.000
+  
+function formatarNomeExibicao(nomeCompleto) {
+  // Remove espaços extras e divide em partes
+  const partes = nomeCompleto.trim().split(/\s+/);
+  
+  // Casos especiais (quando não há nomes suficientes)
+  if (partes.length === 0) return '';
+  if (partes.length === 1) return partes[0];
+  
+  // Verifica se o segundo elemento é uma preposição
+  const preposicoes = new Set(['da', 'de', 'do', 'das', 'dos']);
+  const segundoElemento = partes[1].toLowerCase();
+  
+  // Se for preposição e houver terceiro nome, inclui no resultado
+  if (preposicoes.has(segundoElemento) && partes.length >= 3) {
+    return `${partes[0]} ${partes[1]} ${partes[2]}`.trim();
+  }
+  
+  // Caso normal: primeiro nome + segundo nome
+  return `${partes[0]} ${partes[1]}`.trim();
+}
+   loading = ("Atualizando")
+ 
+
+   sessionStorage.setItem("loading","Atualizado")
+sessionStorage.setItem("loading","")
+
+}
+
+
+
+async function attu() { 
+
+try {
+  const token = sessionStorage.getItem("token")
+  document.getElementById("loading").innerText = "Atualizando Pagina"
+  const cpf = sessionStorage.getItem("cpf");
+   const gmail= sessionStorage.getItem("gmail");
+      const url = `https://script.google.com/macros/s/${encodeURIComponent(token)}/exec?action=Login&cpf=${encodeURIComponent(cpf)}&email=${encodeURIComponent(gmail)}`;
+        const res = await fetch(url);
+        const all = await res.json();
+        
+        if (!res.ok) {
+    throw new Error(data.message || "Erro na API");
+}
+
+if (all.existe) {
+  const alldadoss = { 
+    dados: {
+    nome: all.dados.nome,
+    codigo: all.dados.codigo,
+    total: all.dados.total,
+    saldo : all.dados.saldo,
+    ganhosindicados: all.dados.ganhosindicados,
+    liquido: all.dados.liquido,
+    qntindi : all.dados.qntindi,
+    meusacessos : all.dados.meusacessos,
+    bancosdisponiveis: all.dados.bancosdisponiveis
+    }
+  }
+  try {
+    const al = JSON.parse(localStorage.getItem("alldados"))
+   if (alldadoss.dados.total !== al.dados.total || alldadoss.dados.saldo !== al.dados.saldo || alldadoss.dados.qntindi !== al.dados.qntindi) {
+  localStorage.setItem("alldados", JSON.stringify(alldadoss));
+  Inicial();
+   }
+
+    document.getElementById("loading").innerText = "Atualizado"
+   setTimeout(function() {
+    document.getElementById("loading").innerText = ""
+
+
+   
+
+
+
+
+
+
+}, 3000); // tempo em milissegundos (3000 = 3 segundos)
+  } catch (error) {
+   window.location.href = "{% url 'login' %}";
+  }
+   
+   
+} else {
+  alert("Usuario desconectado, voltando para pagina de login")
+    window.location.href = "{% url 'login' %}";
+
+}
+                  
+    } catch (err) {
+        
+             window.location.href = "{% url 'login' %}";
+
+    }
+   
+  }
+
+
+
+attu();
+Inicial();
+ 
+
+
+
+</script>
+
+</body>
+</html>

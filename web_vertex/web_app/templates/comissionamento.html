@@ -1,0 +1,371 @@
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  {% load static %}
+  
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comissionamento</title>
+<style>
+    
+  
+  
+  
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      margin: 0;
+    }
+
+    .login-container {
+        min-height: 600px;
+        margin: 20px auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      transform: scale(0.7);
+  opacity: 0;
+  animation: zoomIn 3s ease forwards;
+    }
+   @keyframes zoomIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+    background-color: #008000;
+  }
+}
+
+  
+   
+    .logo {
+  width: 200px;       /* ou 80px, 120px — ajuste como quiser */
+  height: auto;
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+    /* Botão do menu */
+    .menu-btn {
+      font-size: 30px;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      color: var(--corbtn);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 200px;
+      width: 200px;
+      position: fixed;
+      top: 0;
+      left: -150%; /* Escondido inicialmente */
+      background-color: #ffffff;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 1;
+      border-radius: 10%;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #16aa3b;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #d0d0d0;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+
+    /* Conteúdo principal */
+    .main {
+      padding: 20px;
+    }
+    .img-container {
+
+    position: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+
+  /* Loading dots */
+   #galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(fill, 1fr));
+    gap: 15px;
+  }
+
+  .iframe-container {
+    margin-top: 60px;
+    height: fill;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centraliza verticalmente */
+    align-items: center;     /* centraliza horizontalmente */
+    background: none;
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: visible; /* garante que o botão apareça */
+      border: 3px solid rgb(255, 255, 255); /* cor, espessura e tipo da borda */
+
+}
+
+  /* Loader dots */
+  .loader {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 150px;
+    background: white;
+    border-radius: 8px;
+  }
+  .dot {
+    margin-top: 40%;
+    width: 8px;
+    height: 8px;
+    background: #16aa3b;
+    border-radius: 50%;
+    animation: blink 1s infinite alternate;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+  }
+
+  /* Estilo do botão */
+  
+  #loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.spinner {
+  display: flex;
+  gap: 5px;
+}
+
+.spinner span {
+  width: 12px;
+  height: 12px;
+  background: #45a049;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+}
+
+.spinner span:nth-child(2) { animation-delay: 0.2s; }
+.spinner span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  to { transform: translateY(-8px); }
+}
+
+</style>
+</head>
+<body>
+  <div class="login-container">
+ <button  class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div id="sidebar" class="sidebar">
+    <a href="{% url 'home' %}">Painel de Conquistas </a>
+      <a href="{% url 'material' %}">Material</a>
+    <a href="{% url 'acessos' %}">Meus acessos</a>
+    <a href="{% url 'treinamento' %}">Treinamento</a>
+    <a href="{% url 'voltar' %}">Sair</a>
+  </div>
+ <img src="{% static 'midias/logovs.png' %}" alt="Logo" class="logo">
+<div id="galeria"></div>
+
+
+   
+ 
+<div id="loading-overlay" style="display:none;">
+  <div class="spinner">
+    <span></span><span></span><span></span>
+  </div>
+  <p>Buscando o material...</p>
+</div>
+
+  
+  </div>
+
+
+<script>
+    
+    mostrarLoading()
+    document.documentElement.style.setProperty('--corbtn', "#ffffff"); 
+    if(!sessionStorage.getItem("cpf")) {
+        window.location.href = "{% url 'voltar' %}";
+    }
+ 
+let corbase = "#ffffff" 
+ document.addEventListener('click', function(event) {
+  
+  const sidebar = document.getElementById("sidebar");
+  const button = document.querySelector(".menu-btn");
+
+  if (!sidebar.contains(event.target) && !button.contains(event.target)) {
+    sidebar.classList.remove("show");
+     document.documentElement.style.setProperty('--corbtn', "#ffffff")
+     corbase = "#ffffff";
+  } 
+ 
+});
+
+ function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("show");
+      if (corbase == "#ffffff") {
+      corbase = "#16aa3b";
+       document.documentElement.style.setProperty('--corbtn', "#16aa3b");
+      } else {
+        document.documentElement.style.setProperty('--corbtn', "#ffffff");
+         corbase = "#ffffff";
+      }
+      
+    }
+ 
+const galeria = document.getElementById("galeria");
+
+fetch("https://script.google.com/macros/s/AKfycbwjmWHbNfLDt-uBXVaGR648WH9JZuYzJYHuPpwlbkyA7ZgPpL_y55UgrH8_ea9JB5xS/exec")
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(vd => {
+        esconderLoading()
+      const container = document.createElement("div");
+      container.classList.add("iframe-container");
+
+      // Loader dots
+      const loader = document.createElement("div");
+      loader.classList.add("loader");
+      loader.innerHTML = `
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      `;
+      container.appendChild(loader);
+
+      // Iframe
+     
+const banco = document.createElement("a");
+banco.style.marginTop = "2px";
+banco.textContent = vd.nome;
+banco.target = "_blank";
+banco.style.color = "white";
+banco.style.fontSize = "18px"; 
+banco.style.fontWeight = "bold"; 
+container.appendChild(banco);
+
+     
+        loader.remove();
+        banco.style.opacity = "1";
+   
+
+const linha = document.createElement("div");
+linha.style.width = "100%"; // garante que ocupe toda a largura
+linha.style.height = "2px";
+linha.style.backgroundColor = "white";
+linha.style.margin = "10px 0";
+linha.style.opacity = "1";
+container.appendChild(linha);
+
+const link = document.createElement("a");
+link.style.marginTop = "none";
+link.textContent = vd.link;
+link.target = "_blank";
+link.style.color = "white";
+link.style.fontSize = "fill"; // Aumenta o tamanho da fonte
+link.style.fontWeight = "bold"; // Deixa o texto em negrito
+container.appendChild(link);
+if(vd.link) {
+const linha1 = document.createElement("div");
+linha1.style.width = "100%"; // garante que ocupe toda a largura
+linha1.style.height = "2px";
+linha1.style.backgroundColor = "white";
+linha1.style.margin = "10px 0";
+linha1.style.opacity = "1";
+container.appendChild(linha1);
+}
+
+const link1 = document.createElement("a");
+link1.style.display = "block"; 
+link1.style.whiteSpace = "pre-line"; 
+link1.innerHTML = vd.link1
+link1.target = "_blank";
+link1.style.color = "white";
+link1.style.fontSize = "14px";
+link1.style.fontWeight = "bold";
+container.appendChild(link1);
+
+
+const link2 = document.createElement("a");
+link2.style.marginTop = "none";
+link1.style.whiteSpace = "pre-line"; 
+link2.textContent = vd.link2;
+link2.target = "_blank";
+link2.style.color = "white";
+link2.style.fontSize = "14px"; // Aumenta o tamanho da fonte
+link2.style.fontWeight = "bold";
+container.appendChild(link2);
+    
+
+      galeria.appendChild(container);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+  }); 
+  
+  
+  
+  
+  function mostrarLoading() {
+  document.getElementById("loading-overlay").style.display = "flex";
+}
+
+function esconderLoading() {
+  document.getElementById("loading-overlay").style.display = "none";
+}
+  </script>

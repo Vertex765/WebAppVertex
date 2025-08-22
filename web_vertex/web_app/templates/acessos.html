@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ {% load static %}
+  
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1s">
+
+  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="{% static 'midias/icone.png' %}" type="image/png">
+
+
+  <title>Painel de Vendas</title>
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .app-container {
+      max-width: 700px;
+      margin: 20px auto;
+      background: #008000;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+
+      opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards; 
+    }
+    @keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    .header {
+      color : white;
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h2 {
+      color: #ffffff;
+      margin: 5px 0;
+      font-size: 22px;
+    }
+
+    .sub {
+      color: #ffffff;
+      font-size: 14px;
+    }
+    .sub1 {
+     text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+    .sales {
+      color: #ffffff;
+      text-align: center;
+      margin: 20px 0 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .progress-bar {
+      background: #ddd;
+      border-radius: 30px;
+      height: 16px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+.progress-fill {
+  width: 0%; /* começa vazio */
+  height: 100%;
+  background-color: var(--linha-cor);
+  transition: width 1.5s ease-out; /* animação ao mudar a largura */
+}
+    .milestones {
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+.nivel-central {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: none; /* evita problemas de clique embaixo */
+}
+
+    .section-title {
+      color: #ffffff;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      display: flex;
+  align-items: center;       /* alinha verticalmente */
+  justify-content: space-between; /* separa o título da imagem */
+    }
+
+    .reward-box, .referral-box {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .reward-box img {
+      width: 24px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .bottom {
+      
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-circle {
+      width: 10px;
+      height: 10px;
+      background-color: #16aa3b;
+      border-radius: 50%;
+      display: inline-block;
+    }
+ .timeline-container {
+      position: relative;
+      margin: 40px auto;
+      padding-left: 40px;
+      width: 300px;
+    }
+.timeline-line {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  width: 4px;
+  background-color: var(--linha-cor);    
+  height: 0;
+  animation: growLine 1s forwards;
+}
+
+@keyframes growLine {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--linha-altura, 100%);
+  }
+}
+
+
+    .timeline-step {
+      color: #ffffff;
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -32px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--linha-cor);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .timeline-text {
+      color: #ffffff;
+      margin-left: 20px;
+    }
+
+    .start-marker,
+    .end-marker {
+      color: #ffffff;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+   
+    #trofeuatu {
+       transition: color 1s ease;
+      width: 80px;
+      height: 80px;
+      color : currentColor;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+      .logovs {
+  width: 200px;       /* ou 80px, 120px — ajuste como quiser */
+  height: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+ 
+#copy {
+  
+  width: 18px;       /* ou 80px, 120px — ajuste como quiser */
+   height: auto;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 0px; /* ou 5px, 6px — teste o valor ideal */
+}
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Botão do menu */
+    .menu-btn {
+      font-size: 30px;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      color: var(--corbtn);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 200px;
+      width: 200px;
+      position: fixed;
+      top: 0;
+      left: -150%; /* Escondido inicialmente */
+      background-color: #ffffff;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 1;
+      border-radius: 10%;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #16aa3b;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #d0d0d0;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+
+    /* Conteúdo principal */
+    .main {
+      padding: 20px;
+    }
+    
+   .multiselect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.multiselect input[type="checkbox"] {
+  display: none; /* Esconde a caixinha original */
+}
+
+.multiselect label {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Quando marcado, o LABEL inteiro muda */
+.multiselect input[type="checkbox"]:checked + label {
+  background: #16aa3b;
+  color: white;
+  border-color: #16aa3b;
+}
+
+.multiselect label:hover {
+  background: #eef6ff;
+}
+#btnin {
+    margin-top: 10px;
+     background-color: #45a049;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      width: 25 0px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 16px;
+      height:5%;
+}
+
+ .copy {
+    width: 18px;       /* ou 80px, 120px — ajuste como quiser */
+   height: auto;
+  cursor: pointer;
+  margin-left: 80;
+  margin-top: 4px; /* ou 5px, 6px — teste o valor ideal */
+}
+#meuBotao {
+     margin-top: 10px;
+     background-color: #45a049;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      width: 25 0px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 16px;
+      height:5%;
+      align-content: center;
+}
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.spinner {
+  display: flex;
+  gap: 5px;
+}
+
+.spinner span {
+  width: 12px;
+  height: 12px;
+  background: #45a049;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+}
+
+.spinner span:nth-child(2) { animation-delay: 0.2s; }
+.spinner span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  to { transform: translateY(-8px); }
+}
+
+  </style>
+</head>
+<script>
+  </script>
+<body>
+
+
+<div class="app-container">
+  <button  class="menu-btn" onclick="toggleMenu()">☰</button>
+   <div id="sidebar" class="sidebar">
+    <a href="{% url 'home' %}">Painel de Conquistas </a>
+    <a href="{% url 'treinamento' %}">Treinamento</a>
+    <a href="{% url 'comissionamento' %}">Comissionamento</a>
+    <a href="{% url 'material' %}">Material</a>
+    <a href="{% url 'voltar' %}">Sair</a>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="main">
+  </div>
+  <div class="header">
+    <div><span id="loading"></span></div>
+    <div id="container-nivelatu">
+    <svg id="trofeuatu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffd700" class="size-3">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+</svg>
+  </div>
+     <h2 >Meus Acessos</h2>
+    <div class="sub">Painel de Acessos </div>
+  </div>
+   
+
+
+  <div class="section-title">Meus Acessos e solicitações</div>
+  <div id="rewards-container"></div>
+  <div class="section-title">Bancos que posso pedir acesso</div>
+  <div class="referral-box" id="referral-box">
+
+  
+
+
+
+
+  </div>
+  
+  <img src="{% static 'midias/logovs.png' %}" alt="Logovs" class="logovs">
+</div>
+
+<div id="loading-overlay" style="display:none;">
+  <div class="spinner">
+    <span></span><span></span><span></span>
+  </div>
+  <p>Realizando a solitação, aguarde...</p>
+</div>
+
+<script>
+
+
+
+if(!sessionStorage.getItem("cpf")) {
+        window.location.href = "{% url 'voltar' %}";
+    }
+
+
+
+ 
+     function copiarTexto(texto) {
+  navigator.clipboard.writeText(texto)
+    .then(() => {
+      alert(texto + " copiado com sucesso!");
+      // Você pode mostrar uma mensagem na tela aqui também 
+      
+    })
+    .catch(err => {
+      alert("Erro ao copiar", err);
+    });
+}
+
+function irParaBanco(link) {
+     window.open(link);
+}
+
+
+      document.documentElement.style.setProperty('--corbtn', "#ffffff");
+let corbase = "#ffffff" 
+ document.addEventListener('click', function(event) {
+  
+  const sidebar = document.getElementById("sidebar");
+  const button = document.querySelector(".menu-btn");
+
+  if (!sidebar.contains(event.target) && !button.contains(event.target)) {
+    sidebar.classList.remove("show");
+     document.documentElement.style.setProperty('--corbtn', "#ffffff")
+     corbase = "#ffffff";
+  } 
+ 
+});
+
+ function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("show");
+      if (corbase == "#ffffff") {
+      corbase = "#16aa3b";
+       document.documentElement.style.setProperty('--corbtn', "#16aa3b");
+      } else {
+        document.documentElement.style.setProperty('--corbtn', "#ffffff");
+         corbase = "#ffffff";
+      }
+    }
+
+
+let dadosg = JSON.parse(localStorage.getItem("alldados"));
+let data = dadosg.dados.meusacessos
+const dados = data
+organizatudo(dados);
+fazerRequisicao()
+// Exemplo de uso
+
+   
+async function fazerRequisicao() {
+      document.getElementById("loading").innerText = "Atualizando Pagina"
+
+  const cpf = sessionStorage.getItem("cpf")
+  const email = sessionStorage.getItem("gmail")
+  const token = sessionStorage.getItem("token")
+  const url2 = `https://script.google.com/macros/s/${encodeURIComponent(token)}/exec?action=Login&cpf=${encodeURIComponent(cpf)}&email=${encodeURIComponent(email)}`;
+
+
+  try {
+    const response = await fetch(url2);
+    
+    if (!response.ok) {
+      throw new Error("Erro HTTP: " + response.status);
+    }
+    
+    try {
+
+      const all = await response.json();
+      
+      if (all.existe) {
+         const alldadoss = { 
+    dados: {
+    nome: all.dados.nome,
+    codigo: all.dados.codigo,
+    total: all.dados.total,
+    saldo : all.dados.saldo,
+    ganhosindicados: all.dados.ganhosindicados,
+    liquido: all.dados.liquido,
+    qntindi : all.dados.qntindi,
+    meusacessos : all.dados.meusacessos,
+    bancosdisponiveis: all.dados.bancosdisponiveis
+    }
+  }
+  
+   const conferencia = JSON.parse(localStorage.getItem("alldados"));
+    if (conferencia.dados.meusacessos !== alldadoss.dados.meusacessos || conferencia.dados.bancosdisponiveis !== alldadoss.dados.bancosdisponiveis) {
+        localStorage.setItem("alldados", JSON.stringify(alldadoss));
+        organizatudo(alldadoss.dados.meusacessos)
+    }
+     document.getElementById("loading").innerText = "Atualizado"
+   setTimeout(function() {
+    document.getElementById("loading").innerText = ""
+}, 3000); 
+
+
+
+        // código quando existe é true
+      } else {
+         window.location.href = "{% url 'login' %}";
+      }
+    } catch (error) {
+
+    window.location.href = "{% url 'login' %}";
+    }
+    
+  } catch (fetchError) {
+    window.location.href = "{% url 'login' %}";
+  }
+}
+
+
+async function organizatudo(dados) {
+    const acessos = organizarAcessos(dados);
+
+          function organizarAcessos(dados) {
+    const partes = dados.split(",");
+
+    return {
+        banco: partes.filter((_, i) => i % 4 === 0),
+        user: partes.filter((_, i) => i % 4 === 1),
+        senha: partes.filter((_, i) => i % 4 === 2),
+        link: partes.filter((_, i) => i % 4 === 3)
+    };
+}
+
+
+
+
+    
+renderRewardBoxes(acessos)
+
+
+function renderRewardBoxes() {
+    const container = document.getElementById("rewards-container");
+    container.innerHTML = ""; 
+    if (acessos.banco[0]) {
+    for (let i = 0; i < acessos.banco.length; i++) {
+        const box = document.createElement("div");
+        box.className = "reward-box";  
+
+ box.innerHTML = `
+<div>
+  <strong>BANCO:</strong> ${acessos.banco[i]}
+  
+  <div style="display: flex; align-items: center; gap: 5px;">
+    <span>User:</span> ${acessos.user[i]}
+    ${acessos.user[i] !== "Aguardando a resposta do banco" 
+      ? `<img src="{% static 'midias/copy.png' %}" alt="share" class="copy" style="cursor:pointer;" onclick="copiarTexto('${acessos.user[i]}')">`
+      : ""}
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 5px;">
+    <span>Senha:</span> ${acessos.senha[i]}
+    ${acessos.user[i] !== "Aguardando a resposta do banco" 
+      ? `<img src="{% static 'midias/copy.png' %}" alt="share" class="copy" style="cursor:pointer;" onclick="copiarTexto('${acessos.senha[i]}')">`
+      : ""}
+  </div>
+
+  ${acessos.user[i] !== "Aguardando a resposta do banco"
+    ? `<button id="btnin" onclick="irParaBanco('${acessos.link[i]}')">Link do Banco</button>`
+    : ""}
+</div>
+`;
+
+
+
+        container.appendChild(box);
+    }
+}
+    else {
+      const box = document.createElement("div");
+        box.className = "reward-box";
+
+        box.innerHTML = `
+            <strong></strong><strong>VOCÊ AINDA NÃO SOLICITOU</strong>
+            <div>
+                <span>SEUS ACESSOS AOS BANCOS</span><strong></strong>
+            </div>
+            <strong></strong><strong></strong>
+        `;
+
+        container.appendChild(box);
+    }
+}
+
+
+
+
+
+          function organizarAcessosbc(dados) {
+    const partes = dados.split(",");
+
+    return {
+        banco: partes.filter((_, i) => i % 2 === 0),
+        display: partes.filter((_, i) => i % 2 === 1)
+    };
+
+          }
+
+
+
+ const chamada = JSON.parse(localStorage.getItem("alldados"));
+const bcsdisponiveisirganizado = organizarAcessosbc(chamada.dados.bancosdisponiveis)
+
+
+
+const bancosjaescohidos = acessos
+const bancosdisponiveisS = bcsdisponiveisirganizado
+
+let filtrados = {
+    banco: [],
+    display: []
+};
+
+bancosdisponiveisS.display.forEach((nome, i) => {
+    if (!bancosjaescohidos.banco.includes(nome)) {
+        filtrados.display.push(nome);
+        filtrados.banco.push(bancosdisponiveisS.banco[i]);
+    }
+});
+
+
+const bcs = filtrados
+bancosdisponiveis(bcs)
+function bancosdisponiveis(org) {
+    const container = document.getElementById("referral-box");
+    container.innerHTML = ""
+    const box = document.createElement("div");
+    box.className = "multiselect";
+    box.innerHTML = "";
+    if (org.banco[0]) {
+    for (let i = 0; i < org.banco.length; i++) {
+        box.innerHTML += `
+            <form> 
+                <div>
+                    <input type="checkbox" id="banco${i}" name="bancos" value="${org.display[i]}">
+                    <label for="banco${i}">${org.banco[i]}</label><br>
+                </div>
+            </form>
+        `;   
+    }
+  container.appendChild(box);
+    box.innerHTML += `<button id="meuBotao" style="display:none;" onclick="enviarslt()">Continuar</button>`;
+  
+
+    const checkboxes = document.querySelectorAll('input[name="bancos"]');
+    const botao = document.getElementById('meuBotao');
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            const algumSelecionado = Array.from(checkboxes).some(c => c.checked);
+            botao.style.display = algumSelecionado ? 'block' : 'none';
+        });
+    });
+} else {
+      box.innerHTML += `
+            <form> 
+                <div>
+                    <input type="checkbox" id="banco" name="bancos" value="">
+                    <label for="banco">NÃO TEM BANCOS DISPONIVEIS PARA SOLICITAÇÃO</label><br>
+                </div>
+            </form>
+        `;   
+}
+container.appendChild(box);
+}
+
+}
+
+
+ function pegarSelecionados() {
+  let selecionados = [];
+  document.querySelectorAll('input[name="bancos"]:checked').forEach(el => {
+    selecionados.push(el.value);
+  });
+ 
+  return selecionados.join(", ");
+}
+
+   
+
+ function enviarslt(bancosjaescohidos) {
+      mostrarLoading()
+ const sltaquit = pegarSelecionados()
+ const sltaqui = sltaquit.split(",");
+  const chamadas = JSON.parse(localStorage.getItem("alldados"));
+  const meuacc = chamadas.dados.meusacessos
+const bcescolhidos = meuacc.banco
+ let send = meuacc
+
+for (let i = 0; i < sltaqui.length; i++) {
+  const banco = sltaqui[i].trim(); // remove espaços extras
+  if (send) {
+    send += `,${banco},Aguardando a resposta do banco,Aguardando a resposta do banco,#`;
+  } else {
+    send = `${banco},Aguardando a resposta do banco,Aguardando a resposta do banco,#`;
+  }
+}
+
+postcod(send)
+async function postcod(send) {
+  const token = sessionStorage.getItem("token")
+  try {
+    const urls = `https://script.google.com/macros/s/${encodeURIComponent(token)}/exec`;
+    
+    const data = {
+      action: "BANCOSSLT",
+      cpf: sessionStorage.getItem("cpf"),
+      bancoslt: send
+    };
+
+    const response = await fetch(urls, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      mode: 'no-cors', // <- ALTERADO AQUI
+      redirect: 'follow',
+      credentials: 'omit'
+    });
+
+
+
+   try {
+   await(fazerRequisicao())
+  esconderLoading()
+  const result = await response.json();
+  
+
+  return ;
+} catch (err) {
+  console.error("Erro ao tentar ler JSON:", err);
+  throw err;
+}
+    const result = await response.json();
+    return result;
+
+  } catch (error) {
+    console.error('Erro na requisição:', error);
+    throw error;
+  }
+ 
+
+}
+
+}
+function mostrarLoading() {
+  document.getElementById("loading-overlay").style.display = "flex";
+}
+
+function esconderLoading() {
+  document.getElementById("loading-overlay").style.display = "none";
+}
+    
+</script>
+
+</body>
+</html>

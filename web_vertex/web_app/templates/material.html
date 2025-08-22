@@ -1,0 +1,341 @@
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  {% load static %}
+  
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Material</title>
+<style>
+    
+  
+  
+  
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: auto;
+      margin: 0;
+    }
+
+    .login-container {
+        min-height: 600px;
+        margin-top: 10%;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      transform: scale(0.7);
+  opacity: 0;
+  animation: zoomIn 3s ease forwards;
+    }
+   @keyframes zoomIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+    background-color: #008000;
+  }
+}
+
+  
+   
+    .logo {
+  width: 200px;       /* ou 80px, 120px — ajuste como quiser */
+  height: auto;
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+    /* Botão do menu */
+    .menu-btn {
+      font-size: 30px;
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      color: var(--corbtn);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 200px;
+      width: 200px;
+      position: fixed;
+      top: 0;
+      left: -150%; /* Escondido inicialmente */
+      background-color: #ffffff;
+      overflow-x: hidden;
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 1;
+      border-radius: 10%;
+    }
+
+    .sidebar a {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #16aa3b;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #d0d0d0;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+
+    /* Conteúdo principal */
+    .main {
+      padding: 20px;
+    }
+    .img-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+
+  /* Loading dots */
+   #galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .iframe-container {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: visible; /* garante que o botão apareça */
+  }
+
+  /* Loader dots */
+  .loader {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 150px;
+    background: white;
+    border-radius: 8px;
+  }
+  .dot {
+    margin-top: 40%;
+    width: 8px;
+    height: 8px;
+    background: #16aa3b;
+    border-radius: 50%;
+    animation: blink 1s infinite alternate;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    from { opacity: 0.3; }
+    to { opacity: 1; }
+  }
+
+  /* Estilo do botão */
+  .iframe-container a {
+    display: block;
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: #16aa3b;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    width: auto;
+    text-align: center;
+    transition: background 0.3s ease;
+  }
+  .iframe-container a:hover {
+    background: #128c2f;
+  }
+  #loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.spinner {
+  display: flex;
+  gap: 5px;
+}
+
+.spinner span {
+  width: 12px;
+  height: 12px;
+  background: #45a049;
+  border-radius: 50%;
+  animation: bounce 0.5s infinite alternate;
+}
+
+.spinner span:nth-child(2) { animation-delay: 0.2s; }
+.spinner span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  to { transform: translateY(-8px); }
+}
+
+</style>
+</head>
+<body>
+  <div class="login-container">
+ <button  class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div id="sidebar" class="sidebar">
+     <a href="{% url 'home' %}">Painel de Conquistas </a>
+    <a href="{% url 'treinamento' %}">Treinamento</a>
+    <a href="{% url 'comissionamento' %}">Comissionamento</a>
+    <a href="{% url 'acessos' %}">Meus acessos</a>
+    <a href="{% url 'voltar' %}">Sair</a>
+  </div>
+ <img src="{% static 'midias/logovs.png' %}" alt="Logo" class="logo">
+<div id="galeria"></div>
+
+
+   
+ 
+<div id="loading-overlay" style="display:none;">
+  <div class="spinner">
+    <span></span><span></span><span></span>
+  </div>
+  <p>Buscando o material...</p>
+</div>
+
+  
+  </div>
+
+
+<script>
+    if(!sessionStorage.getItem("cpf")) {
+        window.location.href = "{% url 'voltar' %}";
+    }
+    mostrarLoading()
+    document.documentElement.style.setProperty('--corbtn', "#ffffff"); 
+ 
+let corbase = "#ffffff" 
+ document.addEventListener('click', function(event) {
+  
+  const sidebar = document.getElementById("sidebar");
+  const button = document.querySelector(".menu-btn");
+
+  if (!sidebar.contains(event.target) && !button.contains(event.target)) {
+    sidebar.classList.remove("show");
+     document.documentElement.style.setProperty('--corbtn', "#ffffff")
+     corbase = "#ffffff";
+  } 
+ 
+});
+
+ function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("show");
+      if (corbase == "#ffffff") {
+      corbase = "#16aa3b";
+       document.documentElement.style.setProperty('--corbtn', "#16aa3b");
+      } else {
+        document.documentElement.style.setProperty('--corbtn', "#ffffff");
+         corbase = "#ffffff";
+      }
+      
+    }
+ 
+const galeria = document.getElementById("galeria");
+
+fetch("https://script.google.com/macros/s/AKfycby_LAatyuZC1m4l--1gPStPsn_QuCEJ_OEynkFZl_wsgwWDr0kUQze5_X9J0F4zpMLrvQ/exec")
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(img => {
+        esconderLoading()
+      const container = document.createElement("div");
+      container.classList.add("iframe-container");
+
+      // Loader dots
+      const loader = document.createElement("div");
+      loader.classList.add("loader");
+      loader.innerHTML = `
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      `;
+      container.appendChild(loader);
+
+      // Iframe
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://drive.google.com/file/d/${img.url}/preview`;
+      iframe.style.width = "150px";
+      iframe.style.height = "150px";
+      iframe.style.border = "none";
+      iframe.style.borderRadius = "8px";
+      iframe.allow = "autoplay";
+      iframe.style.opacity = "0";
+      iframe.style.transition = "opacity 0.3s ease";
+
+      iframe.onload = () => {
+        loader.remove();
+        iframe.style.opacity = "1";
+      };
+
+      container.appendChild(iframe);
+
+      // Botão com link dinâmico
+      const botao = document.createElement("a");
+      botao.textContent = "Download";
+      botao.href = `https://drive.usercontent.google.com/u/0/uc?id=${img.url}&export=download;`
+      botao.target = "_blank";
+      container.appendChild(botao);
+
+      galeria.appendChild(container);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+  }); 
+  
+  
+  
+  
+  function mostrarLoading() {
+  document.getElementById("loading-overlay").style.display = "flex";
+}
+
+function esconderLoading() {
+  document.getElementById("loading-overlay").style.display = "none";
+}
+  </script>
