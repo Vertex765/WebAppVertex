@@ -1,2 +1,2 @@
 web: gunicorn 
-web_vertex.wsgi:application
+web_vertex.web_vertex.wsgi:application
