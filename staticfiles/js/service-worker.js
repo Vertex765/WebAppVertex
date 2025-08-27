@@ -5,7 +5,17 @@ self.addEventListener('install', event => {
     '/',
     '/home/',      // rota definida no urls.py
     '/acessos/',
-    '/login/'
+    '/login/',
+    '/comissionamento/',
+    '/material/',
+    '/treinamento/',
+    '/static/midias/copy.png',
+    '/static/midias/icone.png',
+    '/static/midias/logo.png',
+    '/static/midias/logovs.png',
+    '/static/midias/share.png',
+    '/static/midias/termo.png',
+    '/static/frases.png',
 ]);
         })
     );
