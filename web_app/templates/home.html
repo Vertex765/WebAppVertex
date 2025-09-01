@@ -433,6 +433,8 @@
     <strong></strong>Meu Saldo: <strong id="SaldoL">R$ 0</strong>
     <div>
        <span>Faturamento Liquido </span><strong id="FL">R$ 0</strong></div>
+       <div>
+       <span>Valor Total Vendido</span><strong id="Valor_Total_Vendido">R$ 0</strong></div>
       <strong></strong>Ganho com Indicações: <strong id="Gindi">R$ 0</strong>
      
   </div>
@@ -661,7 +663,7 @@ const link = `${baseUrl}/?codigo=${codigovariavel}`;
       document.getElementById("Qindi").innerText = data.dados.qntindi;
       document.getElementById("SaldoL").innerText = formatarParaReal(data.dados.saldo);
       document.getElementById("FL").innerText = formatarParaReal(data.dados.liquido);
-
+      document.getElementById("Valor_Total_Vendido").innerText = formatarParaReal(data.dados.total)
 
 
        
@@ -753,7 +755,7 @@ else if(totalVendido > 463999 && totalVendido < 735000) {
   }
   if (totalVendido < 10000){
   bonus.cordonivel = ("#cd7f32")
-   bonus.premio = ["Premio R$20,00","Premio R$30,00","Premio R$50,00 | Placa 10k em vendas"]
+   bonus.premio = ["Premio R$50,00","Premio R$100,00","Premio R$200,00 | Placa 10k em vendas"]
    if(classificarVendedor(totalVendido) === "Bronze Nivel I") {
     bonus.resta[0] = ("Falta " + formatarParaReal(4700 - totalVendido))
     bonus.resta[1] = ("Desbloquei a conquista anterior")
@@ -778,7 +780,7 @@ else if(classificarVendedor(totalVendido) === "Bronze Nivel III") {
 }
   if (totalVendido > 9999 && totalVendido < 100000){
     bonus.cordonivel = "#c0c0c0"
-   bonus.premio = ["Premio R$200","Premio R$200","Premio R$500 | Placa 100k em vendas"]
+   bonus.premio = ["Premio R$500,00","Premio R$1.000,00","Premio R$2.000,00 | Placa 100k em vendas"]
    if(classificarVendedor(totalVendido) === "Prata Nivel I") {
     bonus.resta[0] = ("Falta " + formatarParaReal(46550 - totalVendido))
     bonus.resta[1] = ("Desbloquei a conquista anterior")
@@ -804,7 +806,7 @@ else if(classificarVendedor(totalVendido) === "Prata Nivel III") {
 }
 else if (totalVendido > 99999 && totalVendido < 1000000){
   bonus.cordonivel = "#ffd700"
-bonus.premio = ["Premio R$2000","Premio R$2000","Premio R$5000 | Placa 1M em vendas"]
+bonus.premio = ["Premio R$5.000,00","Premio R$10.000,00","Premio R$20.000,00 | Placa 1M em vendas"]
 if(classificarVendedor(totalVendido) === "Ouro Nivel I") {
   bonus.resta[0] = ("Falta " + formatarParaReal(464000 - totalVendido))
     bonus.resta[1] = ("Desbloquei a conquista anterior")
@@ -828,7 +830,7 @@ if(classificarVendedor(totalVendido) === "Ouro Nivel I") {
 else if (totalVendido > 999999 && totalVendido < 10000000)
 {
   bonus.cordonivel = "#00cfff"
-  bonus.premio = ["Premio R$20.000","Premio R$20.000","Premio R$50.000 | Placa Vendedor Diamante"];
+  bonus.premio = ["Premio R$50.000,00","Premio R$100.000,00","Premio R$200.000,00 | Placa Vendedor Diamante"];
   if(classificarVendedor(totalVendido) === "Diamante") {
   bonus.resta[0] = ("Falta " + formatarParaReal(3800000 - totalVendido))
     bonus.resta[1] = ("Desbloquei a conquista anterior")
